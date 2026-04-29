@@ -1,19 +1,21 @@
-public class Cliente {
-    // Dados basicos do cliente
+public class Fornecedor {
+    // Dados basicos do fornecedor
     private Long id;
     private String nome;
-    private String cpf;
+    private String cnpj;
     private String telefone;
+    private String email;
 
-    public Cliente() {
+    public Fornecedor() {
     }
 
-    public Cliente(Long id, String nome, String cpf, String telefone) {
+    public Fornecedor(Long id, String nome, String cnpj, String telefone, String email) {
         // guarda os valores recebidos
         this.id = id;
         this.nome = nome;
-        this.cpf = cpf;
+        this.cnpj = cnpj;
         this.telefone = telefone;
+        this.email = email;
     }
 
     public Long getId() {
@@ -32,12 +34,12 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getCnpj() {
+        return cnpj;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     public String getTelefone() {
@@ -48,9 +50,18 @@ public class Cliente {
         this.telefone = telefone;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         // monta uma string simples pra mostrar o objeto
-        return "Cliente [ID=" + id + ", Nome=" + nome + ", CPF=" + cpf + ", Tel=" + telefone + "]";
+        return "Fornecedor [ID=" + id + ", Nome=" + nome + ", CNPJ=" + cnpj + ", Tel=" + telefone + ", Email=" + email
+                + "]";
     }
 }
