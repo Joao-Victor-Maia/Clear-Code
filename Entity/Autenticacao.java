@@ -1,28 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Autenticacao {
-    // Dados do cargo e suas permissoes
-    private Long id;
+public class Autenticacao extends EntidadeBase {
+        //Dados do cargo e suas permissoes
     private String cargo;
     private List<String> permissoes = new ArrayList<>();
 
     public Autenticacao() {
+        super();
     }
 
     public Autenticacao(Long id, String cargo) {
-        // guarda os valores recebidos
-        this.id = id;
+        super(id);
+            //guarda os valores recebidos
         this.cargo = cargo;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public String getCargo() {
         return cargo;

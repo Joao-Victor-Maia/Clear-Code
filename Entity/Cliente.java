@@ -1,28 +1,21 @@
-public class Cliente {
-    // Dados basicos do cliente
-    private Long id;
+public class Cliente extends EntidadeBase {
+        //Dados basicos do cliente
     private String nome;
     private String cpf;
     private String telefone;
 
-    public Cliente() {
+    public Cliente() {        
+        super();
     }
 
     public Cliente(Long id, String nome, String cpf, String telefone) {
-        // guarda os valores recebidos
-        this.id = id;
+        super(id); //guarda os valores recebidos
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public String getNome() {
         return nome;

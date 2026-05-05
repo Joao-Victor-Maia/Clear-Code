@@ -1,30 +1,23 @@
-public class Fornecedor {
-    // Dados basicos do fornecedor
-    private Long id;
+public class Fornecedor extends EntidadeBase{
+    //Dados basicos do fornecedor
     private String nome;
     private String cnpj;
     private String telefone;
     private String email;
 
     public Fornecedor() {
+        super();
     }
 
     public Fornecedor(Long id, String nome, String cnpj, String telefone, String email) {
-        // guarda os valores recebidos
-        this.id = id;
+        super(id);//guarda os valores recebidos
         this.nome = nome;
         this.cnpj = cnpj;
         this.telefone = telefone;
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public String getNome() {
         return nome;

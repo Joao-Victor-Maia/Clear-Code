@@ -1,32 +1,25 @@
 import java.util.Date;
 
-public class Transacao {
+public class Transacao extends EntidadeBase {
     // Representa um pagamento ligado a uma OS
-    private Long id;
     private Long osId;
     private double valor;
     private Date data;
     private String formaPagamento;
 
     public Transacao() {
+        super();
     }
 
     public Transacao(Long id, Long osId, double valor, String formaPagamento) {
-        // guarda os valores recebidos e coloca a data de agora
-        this.id = id;
+        super(id); // guarda os valores recebidos e coloca a data de agora
         this.osId = osId;
         this.valor = valor;
         this.data = new Date();
         this.formaPagamento = formaPagamento;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public Long getOsId() {
         return osId;

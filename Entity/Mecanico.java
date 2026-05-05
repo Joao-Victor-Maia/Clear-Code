@@ -1,26 +1,20 @@
-public class Mecanico {
-    // Dados basicos do mecanico
-    private Long id;
+public class Mecanico extends EntidadeBase {
+    //Dados basicos do mecanico
     private String nome;
     private String especialidade;
 
     public Mecanico() {
+        super();
     }
 
-    public Mecanico(Long id, String nome, String especialidade) {
-        // guarda os valores recebidos
-        this.id = id;
+    public Mecanico(Long id, String nome, String especialidade) { 
+        //guarda os valores recebidos
+        super(id);
         this.nome = nome;
         this.especialidade = especialidade;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public String getNome() {
         return nome;

@@ -2,9 +2,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrdemService {
+public class OrdemService extends EntidadeBase {
     // Representa uma ordem de servico (OS) com servicos e pecas
-    private Long id;
     private Long veiculoId;
     private Long mecanicoId;
     private String status;
@@ -13,24 +12,18 @@ public class OrdemService {
     private List<Peca> pecas = new ArrayList<>();
 
     public OrdemService() {
+        super();
     }
 
     public OrdemService(Long id, Long veiculoId, Long mecanicoId, String status) {
-        // guarda os dados da OS e coloca a data de agora
-        this.id = id;
+        super(id); //guarda os dados da OS e coloca a data de agora
         this.veiculoId = veiculoId;
         this.mecanicoId = mecanicoId;
         this.status = status;
         this.dataAbertura = new Date();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public Long getVeiculoId() {
         return veiculoId;

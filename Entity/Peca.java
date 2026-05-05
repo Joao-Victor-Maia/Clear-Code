@@ -1,26 +1,19 @@
-public class Peca {
+public class Peca extends EntidadeBase {
     // Dados basicos de uma peca
-    private Long id;
     private String nome;
     private double preco;
 
     public Peca() {
+        super();
     }
 
     public Peca(Long id, String nome, double preco) {
-        // guarda os valores recebidos
-        this.id = id;
+        super(id); // guarda os valores recebidos
         this.nome = nome;
         this.preco = preco;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public String getNome() {
         return nome;

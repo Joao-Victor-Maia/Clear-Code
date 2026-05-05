@@ -1,30 +1,23 @@
-public class Veiculo {
+public class Veiculo extends EntidadeBase {
     // Dados basicos do veiculo e o dono (clienteId)
-    private Long id;
     private String placa;
     private String modelo;
     private String marca;
     private Long clienteId;
 
     public Veiculo() {
+        super();
     }
 
     public Veiculo(Long id, String placa, String modelo, String marca, Long clienteId) {
-        // guarda os valores recebidos
-        this.id = id;
+        super(id); // guarda os valores recebidos
         this.placa = placa;
         this.modelo = modelo;
         this.marca = marca;
         this.clienteId = clienteId;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
 
     public String getPlaca() {
         return placa;
