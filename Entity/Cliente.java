@@ -15,8 +15,6 @@ public class Cliente extends EntidadeBase {
         this.telefone = telefone;
     }
 
-    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
-
     public String getNome() {
         return nome;
     }

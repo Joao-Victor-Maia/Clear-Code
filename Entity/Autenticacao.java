@@ -53,7 +53,7 @@ public class Autenticacao extends EntidadeBase {
             return false;
         }
 
-        // verifica se a permissao esta na lista
+        // verifica se a permissao está na lista
         return permissoes.contains(recurso);
     }
 

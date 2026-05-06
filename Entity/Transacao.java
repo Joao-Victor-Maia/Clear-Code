@@ -19,8 +19,6 @@ public class Transacao extends EntidadeBase {
         this.formaPagamento = formaPagamento;
     }
 
-    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
-
     public Long getOsId() {
         return osId;
     }

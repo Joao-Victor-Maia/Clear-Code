@@ -15,12 +15,12 @@ public class AutenticacaoRepository extends RepositoryGenerico<Autenticacao> {
             }
         }
 
-        // se nao encontrou, retorna null
+        // se não encontrou, retorna null
         return null;
     }
 
     public boolean podeAcessar(String cargo, String recurso) { // verifica acesso
-        // busca o cargo e usa a lista de permissoes de dentro dele
+        // busca o cargo e usa a lista de permissões de dentro dele
         Autenticacao autenticacao = buscarPorCargo(cargo);
         if (autenticacao == null) {
             return false;

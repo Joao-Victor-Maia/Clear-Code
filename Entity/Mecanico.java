@@ -14,8 +14,6 @@ public class Mecanico extends EntidadeBase {
         this.especialidade = especialidade;
     }
 
-    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
-
     public String getNome() {
         return nome;
     }

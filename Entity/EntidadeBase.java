@@ -2,7 +2,7 @@ public abstract class EntidadeBase {
 
     protected Long id;
 
-    // Construtor vazio necessario para o RepositoryGenerico
+    // Construtor vazio necessário para o RepositoryGenerico
     public EntidadeBase() {
     }
 

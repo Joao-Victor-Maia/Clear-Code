@@ -17,8 +17,6 @@ public class Veiculo extends EntidadeBase {
         this.clienteId = clienteId;
     }
 
-    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
-
     public String getPlaca() {
         return placa;
     }

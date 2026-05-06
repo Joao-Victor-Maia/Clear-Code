@@ -13,8 +13,6 @@ public class Peca extends EntidadeBase {
         this.preco = preco;
     }
 
-    // Os métodos getId() e setId() foram removidos pois agora são herdados de EntidadeBase
-
     public String getNome() {
         return nome;
     }

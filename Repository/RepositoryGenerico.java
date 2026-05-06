@@ -3,7 +3,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-// O uso de Generics <T> permite que esta classe sirva para qualquer Entidade
+// O uso do Generico <T> permite que esta classe sirva para qualquer Entidade
 public abstract class RepositoryGenerico<T extends EntidadeBase> {
 
     // Alta Performance: Substituindo List (O(N)) por Map (O(1))
