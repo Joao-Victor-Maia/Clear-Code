@@ -1,9 +1,12 @@
 import java.util.List;
 
 public class OrdemServiceService {
+    // Esse service cuida das validações de ordens de serviço.
+    // Ele garante que não seja criada uma OS sem um veículo ou mecânico válido.
+    // Ele também é o "cérebro" do módulo de OS, onde ficam as regras de negócio.
+    // Ele tem acesso ao repositório de OS, mas também precisa acessar os repositórios de veículos e mecânicos
+    // para validar se os IDs informados existem de verdade.
     
-    // Este Service é interessante porque ele se comunica com 3 repositórios diferentes!
-    // Ele é um verdadeiro "Maestro/Chef de cozinha"
     private final OrdemServiceRepository ordemServiceRepo;
     private final VeiculoRepository veiculoRepo;
     private final MecanicoRepository mecanicoRepo;
@@ -21,8 +24,8 @@ public class OrdemServiceService {
             throw new RegraNegocioException("A ordem de serviço não pode ser nula.");
         }
 
-        // Regra 1: O veículo precisa EXISTIR de verdade no banco de dados. 
-        // Não podemos abrir uma OS para um carro fantasma!
+        // Regra 1: o veículo precisa existir de verdade no banco de dados.
+        // Não podemos abrir uma OS para um carro fantasma.
         if (ordem.getVeiculoId() == null) {
             throw new RegraNegocioException("É obrigatório informar o ID do veículo!");
         }
@@ -30,7 +33,7 @@ public class OrdemServiceService {
             throw new RegraNegocioException("Veículo não encontrado! O veículo deve ser cadastrado antes da OS.");
         }
 
-        // Regra 2: O mecânico precisa EXISTIR de verdade.
+        // Regra 2: o mecânico também precisa existir no banco de dados.
         if (ordem.getMecanicoId() == null) {
             throw new RegraNegocioException("É obrigatório informar o ID do mecânico!");
         }
@@ -38,7 +41,8 @@ public class OrdemServiceService {
             throw new RegraNegocioException("Mecânico não encontrado! Atribua a OS a um mecânico válido.");
         }
 
-        // Passou pelas regras pesadas? Então salva!
+        // Se chegou até aqui, todas as regras foram validadas.
+        // Agora é seguro mandar a OS para o repositório salvar.
         return ordemServiceRepo.salvar(ordem);
     }
 

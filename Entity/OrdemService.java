@@ -3,7 +3,7 @@ import java.util.Date;
 import java.util.List;
 
 public class OrdemService extends EntidadeBase {
-    // Representa uma ordem de servico (OS) com servicos e pecas
+    // Representa uma ordem de serviço (OS) com serviços e peças
     private Long veiculoId;
     private Long mecanicoId;
     private String status;
@@ -16,7 +16,7 @@ public class OrdemService extends EntidadeBase {
     }
 
     public OrdemService(Long id, Long veiculoId, Long mecanicoId, String status) {
-        super(id); //guarda os dados da OS e coloca a data de agora
+        super(id); // guarda o ID da OS e anota a data de abertura
         this.veiculoId = veiculoId;
         this.mecanicoId = mecanicoId;
         this.status = status;
@@ -64,12 +64,12 @@ public class OrdemService extends EntidadeBase {
     public double getValorTotal() {
         double total = 0;
 
-        // for: soma o valor de todos os servicos
+        // Soma o valor de todos os serviços
         for (int i = 0; i < servicos.size(); i++) {
             total += servicos.get(i).getValor();
         }
 
-        // for: soma o preco de todas as pecas
+        // Soma o preço de todas as peças
         for (int i = 0; i < pecas.size(); i++) {
             total += pecas.get(i).getPreco();
         }

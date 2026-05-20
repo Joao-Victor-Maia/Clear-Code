@@ -1,5 +1,5 @@
 public class Cliente extends EntidadeBase {
-        //Dados basicos do cliente
+    // Dados básicos do cliente
     private String nome;
     private String cpf;
     private String telefone;
@@ -9,7 +9,7 @@ public class Cliente extends EntidadeBase {
     }
 
     public Cliente(Long id, String nome, String cpf, String telefone) {
-        super(id); //guarda os valores recebidos
+        super(id); // guarda os valores recebidos
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
@@ -41,7 +41,7 @@ public class Cliente extends EntidadeBase {
 
     @Override
     public String toString() {
-        // monta uma string simples pra mostrar o objeto
+        // Monta uma string simples para mostrar o cliente
         return "Cliente [ID=" + id + ", Nome=" + nome + ", CPF=" + cpf + ", Tel=" + telefone + "]";
     }
 }

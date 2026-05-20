@@ -1,5 +1,5 @@
 public class Peca extends EntidadeBase {
-    // Dados basicos de uma peca
+    // Dados básicos de uma peça
     private String nome;
     private double preco;
 
@@ -31,7 +31,7 @@ public class Peca extends EntidadeBase {
 
     @Override
     public String toString() {
-        // monta uma string simples pra mostrar o objeto
+        // Monta uma string simples para mostrar a peça
         return "Peca [ID=" + id + ", Nome=" + nome + ", Preço=R$ " + preco + "]";
     }
 }

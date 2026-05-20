@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Autenticacao extends EntidadeBase {
-        //Dados do cargo e suas permissoes
+        // Dados do cargo e suas permissões
     private String cargo;
     private List<String> permissoes = new ArrayList<>();
 
@@ -12,7 +12,7 @@ public class Autenticacao extends EntidadeBase {
 
     public Autenticacao(Long id, String cargo) {
         super(id);
-            //guarda os valores recebidos
+        // Guarda o cargo recebido.
         this.cargo = cargo;
     }
 
@@ -31,35 +31,35 @@ public class Autenticacao extends EntidadeBase {
     }
 
     public void adicionarPermissao(String permissao) {
-        // if: nao adiciona texto vazio/nulo
+        // Se a permissão vier vazia, ignora.
         if (permissao == null || permissao.trim().isEmpty()) {
             return;
         }
 
-        // if: evita adicionar a mesma permissao duas vezes
+        // Só adiciona se ainda não tiver essa permissão.
         if (!permissoes.contains(permissao)) {
             permissoes.add(permissao);
         }
     }
 
     public void removerPermissao(String permissao) {
-        // remove (se nao existir, nao acontece nada)
+        // Remove a permissão da lista se ela existir.
         permissoes.remove(permissao);
     }
 
     public boolean podeAcessar(String recurso) {
-        // if: se o recurso vier vazio, nao tem acesso
+        // Se o recurso vier vazio, não dá pra permitir acesso.
         if (recurso == null || recurso.trim().isEmpty()) {
             return false;
         }
 
-        // verifica se a permissao está na lista
+        // Verifica se essa permissão está na lista.
         return permissoes.contains(recurso);
     }
 
     @Override
     public String toString() {
-        // monta uma string simples pra mostrar o objeto
+        // Monta uma string simples para mostrar a autenticação
         return "Autenticacao [ID=" + id + ", Cargo=" + cargo + ", Permissoes=" + permissoes + "]";
     }
 }

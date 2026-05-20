@@ -1,4 +1,4 @@
 public class OrdemServiceRepository extends RepositoryGenerico<OrdemService> { 
-    // "banco" em memória de ordens de serviço
-    // Os métodos salvar(), listar(), buscarPorId() e remover() foram herdados da classe pai
+    // Repositório em memória para ordens de serviço.
+    // Ele herda salvar(), listar(), buscarPorId() e remover() de RepositoryGenerico.
 }

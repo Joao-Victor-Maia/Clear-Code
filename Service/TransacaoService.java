@@ -1,5 +1,7 @@
 import java.util.List;
 
+// Esse service organiza as regras de negócio das transações.
+// Ele verifica se o pagamento está correto antes de mandar salvar.
 public class TransacaoService {
     private final TransacaoRepository transacaoRepo;
     private final OrdemServiceRepository ordemServiceRepo;
@@ -18,12 +20,12 @@ public class TransacaoService {
             throw new RegraNegocioException("A forma de pagamento é obrigatória!");
         }
         
-        // Regra Crítica: Transação precisa ter valor positivo
+        // Regra importante: o valor da transação precisa ser maior que zero.
         if (transacao.getValor() <= 0) {
             throw new RegraNegocioException("O valor da transação deve ser maior que zero!");
         }
 
-        // Regra de Integridade: A OS (Ordem de Serviço) precisa existir
+        // Regra de integridade: a transação deve estar vinculada a uma OS real.
         if (transacao.getOsId() == null) {
             throw new RegraNegocioException("É obrigatório informar o ID da Ordem de Serviço!");
         }

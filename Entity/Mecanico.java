@@ -1,5 +1,5 @@
 public class Mecanico extends EntidadeBase {
-    //Dados basicos do mecanico
+    // Dados básicos do mecânico
     private String nome;
     private String especialidade;
 
@@ -8,7 +8,7 @@ public class Mecanico extends EntidadeBase {
     }
 
     public Mecanico(Long id, String nome, String especialidade) { 
-        //guarda os valores recebidos
+        // guarda os valores recebidos
         super(id);
         this.nome = nome;
         this.especialidade = especialidade;
@@ -32,7 +32,7 @@ public class Mecanico extends EntidadeBase {
 
     @Override
     public String toString() {
-        // monta uma string simples pra mostrar o objeto
+        // Monta uma string simples para mostrar o mecânico
         return "Mecanico [ID=" + id + ", Nome=" + nome + ", Especialidade=" + especialidade + "]";
     }
 }

@@ -1,26 +1,27 @@
 public class AutenticacaoRepository extends RepositoryGenerico<Autenticacao> { 
-    // Todos os métodos de CRUD (salvar, remover, listar, buscarPorId) foram herdados!
+    // Repositório em memória para cargos e permissões.
+    // Ele herda salvar(), listar(), buscarPorId() e remover() do RepositoryGenerico.
 
     public Autenticacao buscarPorCargo(String cargo) { // procura pelo cargo
-        // if: valida se o texto veio vazio/nulo
+        // Se o cargo vier vazio ou nulo, não faz sentido buscar.
         if (cargo == null || cargo.trim().isEmpty()) {
             return null;
         }
 
-        // Utiliza o listar() que vem do RepositoryGenerico
+        // Usa o listar() do RepositoryGenerico para verificar os cargos.
         for (Autenticacao atual : listar()) {
-            // if: quando o cargo bate, retorna o registro
+            // Se o cargo bater, retorna esse registro.
             if (cargo.equalsIgnoreCase(atual.getCargo())) {
                 return atual;
             }
         }
 
-        // se não encontrou, retorna null
+        // Se não encontrou, retorna null.
         return null;
     }
 
     public boolean podeAcessar(String cargo, String recurso) { // verifica acesso
-        // busca o cargo e usa a lista de permissões de dentro dele
+        // Busca o cargo e verifica as permissões desse cargo.
         Autenticacao autenticacao = buscarPorCargo(cargo);
         if (autenticacao == null) {
             return false;

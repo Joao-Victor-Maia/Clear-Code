@@ -1,5 +1,8 @@
 import java.util.List;
 
+// Esse service cuida das validações de veículos.
+// Ele garante que não seja criado um veículo sem placa, modelo ou marca, e que não haja dois veículos com a mesma placa. Ele também garante que o veículo esteja associado a um cliente válido.
+
 public class VeiculoService {
     private final VeiculoRepository veiculoRepo;
     private final ClienteRepository clienteRepo;
@@ -14,7 +17,7 @@ public class VeiculoService {
             throw new RegraNegocioException("O veículo não pode ser nulo.");
         }
 
-        // Validações de preenchimento
+        // Verifica se os campos obrigatórios estão preenchidos
         if (veiculo.getPlaca() == null || veiculo.getPlaca().trim().isEmpty()) {
             throw new RegraNegocioException("A placa do veículo é obrigatória!");
         }
@@ -25,7 +28,7 @@ public class VeiculoService {
             throw new RegraNegocioException("A marca do veículo é obrigatória!");
         }
 
-        // Validação de Placa Única
+        // Verifica se não existe outro veículo com a mesma placa.
         for (Veiculo existente : veiculoRepo.listar()) {
             if (existente.getPlaca().equalsIgnoreCase(veiculo.getPlaca()) 
                 && (veiculo.getId() == null || !existente.getId().equals(veiculo.getId()))) {

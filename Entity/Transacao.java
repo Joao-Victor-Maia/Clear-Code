@@ -1,7 +1,8 @@
 import java.util.Date;
 
 public class Transacao extends EntidadeBase {
-    // Representa um pagamento ligado a uma OS
+    // Essa classe representa um pagamento ligado a uma OS.
+    // Ela guarda qual OS foi paga, o valor, a data e como foi pago.
     private Long osId;
     private double valor;
     private Date data;
@@ -12,7 +13,7 @@ public class Transacao extends EntidadeBase {
     }
 
     public Transacao(Long id, Long osId, double valor, String formaPagamento) {
-        super(id); // guarda os valores recebidos e coloca a data de agora
+        super(id); // guarda o ID e permite que o construtor crie o objeto com data
         this.osId = osId;
         this.valor = valor;
         this.data = new Date();
@@ -49,7 +50,7 @@ public class Transacao extends EntidadeBase {
 
     @Override
     public String toString() {
-        // monta uma string simples pra mostrar o objeto
+        // Monta uma string simples para mostrar a transação
         return "Transacao [ID=" + id + ", OS=" + osId + ", Valor=R$ " + valor + ", Forma=" + formaPagamento
                 + ", Data=" + data + "]";
     }

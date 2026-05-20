@@ -1,4 +1,4 @@
 public class TransacaoRepository extends RepositoryGenerico<Transacao> { 
-    // "banco" em memória de transações
-    // Os métodos salvar(), listar(), buscarPorId() e remover() foram herdados da classe pai
+    // Repositório em memória para transações.
+    // Ele herda salvar(), listar(), buscarPorId() e remover() de RepositoryGenerico.
 }

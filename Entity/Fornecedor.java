@@ -1,5 +1,5 @@
 public class Fornecedor extends EntidadeBase{
-    //Dados basicos do fornecedor
+    // Dados básicos do fornecedor
     private String nome;
     private String cnpj;
     private String telefone;
@@ -10,7 +10,7 @@ public class Fornecedor extends EntidadeBase{
     }
 
     public Fornecedor(Long id, String nome, String cnpj, String telefone, String email) {
-        super(id);//guarda os valores recebidos
+        super(id); // guarda os valores recebidos
         this.nome = nome;
         this.cnpj = cnpj;
         this.telefone = telefone;
@@ -51,7 +51,7 @@ public class Fornecedor extends EntidadeBase{
 
     @Override
     public String toString() {
-        // monta uma string simples pra mostrar o objeto
+        // Monta uma string simples para mostrar o fornecedor
         return "Fornecedor [ID=" + id + ", Nome=" + nome + ", CNPJ=" + cnpj + ", Tel=" + telefone + ", Email=" + email
                 + "]";
     }

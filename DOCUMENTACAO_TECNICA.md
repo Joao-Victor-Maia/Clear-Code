@@ -190,26 +190,45 @@ O benefício prático: o `Main` cria **um único** `ClienteRepository` e entrega
 A comunicação é sempre em **uma única direção**: de fora para dentro.
 
 ```
-Main
+Main (Orquestrador / Ponto de Partida)
+  │  Cria tudo e chama o Controller
+  ▼
+ClienteController (Interação com Usuário via ConsoleUtils)
   │  Chama clienteService.salvar(cliente)
   ▼
-ClienteService
+ClienteService (Regras de Negócio)
   │  Valida as regras, depois chama repositorio.salvar(cliente)
   ▼
-ClienteRepository (herda de RepositoryGenerico)
+ClienteRepository (Banco de Dados em Memória)
   │  Executa o put() no LinkedHashMap
   ▼
-LinkedHashMap<Long, Cliente>
-  │  Armazena o objeto Cliente
-  ▼
 Cliente (Entity)
-  └── Guarda os dados: id=1, nome="João", cpf="123..."
+  └── Guarda os dados estáticos
 ```
 
 **Regra de Ouro:**
 - A `Entity` não conhece ninguém.
 - O `Repository` conhece apenas a `Entity`.
 - O `Service` conhece o `Repository` e a `Entity`.
-- O `Main` conhece apenas o `Service`.
+- O `Controller` conhece apenas o `Service`.
 
-Nenhuma camada "pula" a outra. O `Main` nunca chama o `Repository` diretamente. A `Entity` nunca chama o `Service`. Essa disciplina é o que torna o sistema **fácil de manter**, **fácil de testar** e **fácil de evoluir**.
+Nenhuma camada "pula" a outra. O `Controller` nunca chama o `Repository` diretamente. A `Entity` nunca chama o `Service`. Essa disciplina é o que torna o sistema **fácil de manter**, **fácil de testar** e **fácil de evoluir**.
+
+---
+
+## Camada 4: `Controller` (A Interface de Comunicação)
+
+### O que é?
+A camada Controller tem como única função "conversar" com o mundo exterior. No nosso caso atual, o mundo exterior é o terminal do Windows/Linux.
+
+### Por que separamos do `Main`?
+Antes, o `Main` cuidava de exibir texto (`System.out.println`), ler texto (`Scanner`), ter regras lógicas e iniciar o programa. Isso violava o princípio da Responsabilidade Única (Single Responsibility Principle).
+
+Agora:
+- Os **Controllers** ficam responsáveis APENAS por exibir os menus e enviar os dados preenchidos para o `Service`.
+- O **Main** fica responsável APENAS por iniciar o programa e "injetar as dependências" (criar as classes e ligá-las umas nas outras).
+
+### A classe `ConsoleUtils`
+Criamos essa classe para resolver os dois maiores problemas de ler dados via terminal em Java:
+1. **Crash por dados inválidos:** Se o sistema pedir um ID numérico e o usuário digitar "abc", o Java lança um `NumberFormatException` e desliga na hora. O `ConsoleUtils` captura esse erro com um `try-catch` dentro de um `while(true)`, pedindo para o usuário digitar novamente até acertar.
+2. **Pulo de linha do Scanner:** Misturar `scanner.nextInt()` e `scanner.nextLine()` causa bugs bizarros onde o Java "pula" perguntas. O `ConsoleUtils` resolve isso lendo TUDO como texto (`nextLine()`) e convertendo internamente de forma segura.

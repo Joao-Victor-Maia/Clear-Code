@@ -1,5 +1,7 @@
 import java.util.List;
 
+// Esse service cuida das validações de mecânicos.
+// Ele garante que não seja criado um mecânico sem nome ou especialidade.
 public class MecanicoService {
     private final MecanicoRepository repositorio;
 
@@ -16,6 +18,7 @@ public class MecanicoService {
             throw new RegraNegocioException("O nome do mecânico é obrigatório!");
         }
         
+        // Regra básica: mecânico precisa ter uma especialidade definida.
         if (mecanico.getEspecialidade() == null || mecanico.getEspecialidade().trim().isEmpty()) {
             throw new RegraNegocioException("A especialidade do mecânico é obrigatória!");
         }

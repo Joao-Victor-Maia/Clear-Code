@@ -1,5 +1,9 @@
 import java.util.List;
 
+// Esse service cuida das validações de autenticação e controle de acesso.
+// Ele garante que não seja criado um cargo sem nome, e que não haja cargos duplicados.
+// Ele também é responsável por verificar se um cargo tem permissão para acessar um recurso específico.
+
 public class AutenticacaoService {
     private final AutenticacaoRepository repositorio;
 
@@ -16,7 +20,8 @@ public class AutenticacaoService {
             throw new RegraNegocioException("O nome do cargo é obrigatório!");
         }
 
-        // Validação de Cargo Único
+        // Verifica se já existe outro cargo com o mesmo nome.
+        // Não faz sentido cadastrar cargos duplicados no sistema.
         Autenticacao existente = repositorio.buscarPorCargo(autenticacao.getCargo());
         if (existente != null && (autenticacao.getId() == null || !existente.getId().equals(autenticacao.getId()))) {
             throw new RegraNegocioException("Já existe um cargo com este nome cadastrado!");

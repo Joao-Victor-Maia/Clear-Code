@@ -1,5 +1,5 @@
 public class Servico extends EntidadeBase {
-    // Dados basicos de um servico feito no veiculo
+    // Dados básicos de um serviço feito no veículo
     private String descricao;
     private double valor;
     private Long veiculoId;

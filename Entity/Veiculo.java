@@ -1,5 +1,5 @@
 public class Veiculo extends EntidadeBase {
-    // Dados basicos do veiculo e o dono (clienteId)
+    // Dados básicos do veículo e o dono (clienteId)
     private String placa;
     private String modelo;
     private String marca;

@@ -1,5 +1,7 @@
 import java.util.List;
 
+// Esse service cuida das regras de negócio para serviços prestados.
+// Ele garante que só se crie serviço válido e ligado a um veículo existente.
 public class ServicoService {
     private final ServicoRepository servicoRepo;
     private final VeiculoRepository veiculoRepo;
@@ -18,12 +20,12 @@ public class ServicoService {
             throw new RegraNegocioException("A descrição do serviço é obrigatória!");
         }
         
-        // Regra Crítica: Valor não pode ser negativo
+        // Regra simples: o serviço precisa ter valor não negativo.
         if (servico.getValor() < 0) {
             throw new RegraNegocioException("O valor do serviço não pode ser negativo!");
         }
 
-        // Regra de Integridade: Veículo precisa existir
+        // Regra de integridade: o serviço deve estar ligado a um veículo cadastrado.
         if (servico.getVeiculoId() == null) {
             throw new RegraNegocioException("É obrigatório informar o ID do veículo para este serviço!");
         }

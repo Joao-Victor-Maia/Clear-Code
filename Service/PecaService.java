@@ -1,5 +1,8 @@
 import java.util.List;
 
+// Esse service cuida das validações de peças.
+// Ele garante que não seja criada uma peça sem nome ou com preço negativo.
+
 public class PecaService {
     private final PecaRepository repositorio;
 
@@ -16,7 +19,7 @@ public class PecaService {
             throw new RegraNegocioException("O nome da peça é obrigatório!");
         }
         
-        // Regra de Negócio Crítica: Preço não pode ser negativo
+        // Regra importante: o preço da peça não pode ser negativo.
         if (peca.getPreco() < 0) {
             throw new RegraNegocioException("O preço da peça não pode ser negativo!");
         }
