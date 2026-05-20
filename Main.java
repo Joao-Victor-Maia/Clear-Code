@@ -8,11 +8,12 @@ public class Main {
         // =====================================================================
         // 1. INSTANCIANDO REPOSITÓRIOS (As Gavetas de Dados)
         // =====================================================================
-        // Aqui eu crio só UMA vez cada repositório. Eles são tipo gavetas onde
+        // Aqui é criado só UMA vez cada repositório. Eles são tipo gavetas onde
         // guardo os dados enquanto o programa estiver aberto.
-        // Se eu criasse vários repositórios diferentes, os dados poderiam se
+        // Se criasse vários repositórios diferentes, os dados poderiam se
         // perder entre as partes do sistema. Por isso a ideia é criar um só e
         // passar para todo mundo usar.
+        
         ClienteRepository clienteRepo = new ClienteRepository();
         VeiculoRepository veiculoRepo = new VeiculoRepository();
         MecanicoRepository mecanicoRepo = new MecanicoRepository();
@@ -24,11 +25,12 @@ public class Main {
         // =====================================================================
         // 2. INSTANCIANDO SERVICES (Os Cérebros / Regras de Negócio)
         // =====================================================================
-        // Aqui eu monto os services. Eles são os "cérebros" que sabem aplicar as
+        // Aqui os services são instanciados. Eles são os "cérebros" que sabem aplicar as
         // regras do sistema antes de salvar qualquer coisa.
         // Para isso, eu passo o repositório pronto para dentro do Service.
         // Assim o Service pode checar se o CPF está ok, se o nome foi preenchido,
         // e só então pedir ao repo pra guardar o dado.
+
         ClienteService clienteService = new ClienteService(clienteRepo);
         VeiculoService veiculoService = new VeiculoService(veiculoRepo, clienteRepo);
         MecanicoService mecanicoService = new MecanicoService(mecanicoRepo);
@@ -40,10 +42,11 @@ public class Main {
         // =====================================================================
         // 3. INSTANCIANDO CONTROLLERS (A Interface com o Usuário / Terminal)
         // =====================================================================
-        // Agora eu crio os controllers. Eles são a parte que conversa com o
+        // Agora os controllers são instanciados. Eles são a parte que conversa com o
         // usuário no terminal. O controller não faz as regras, ele só pega o
         // que o usuário digitou e manda para o service certo.
         // O ConsoleUtils ajuda a ler o teclado sem travar se o usuário errar.
+
         ClienteController clienteController = new ClienteController(clienteService, console);
         VeiculoController veiculoController = new VeiculoController(veiculoService, console);
         MecanicoController mecanicoController = new MecanicoController(mecanicoService, console);
@@ -60,6 +63,7 @@ public class Main {
         // Enquanto o usuário não digitar 0, o menu vai aparecer de novo.
         // Cada opção abre uma parte diferente do sistema para cadastrar,
         // listar ou buscar informações.
+
         while (opcao != 0) {
             System.out.println("\n╔══════════════════════════════════╗");
             System.out.println("║     SISTEMA DA OFICINA - MENU    ║");
