@@ -1,5 +1,7 @@
 # Arquitetura do Projeto: Oficina Mecânica
 
+https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white
+
 Este documento descreve a arquitetura em camadas utilizada no projeto, baseada nos princípios de Clean Architecture e N-Tier Architecture (Arquitetura em N-Camadas).
 
 A divisão do código em diferentes pacotes (pastas) tem como objetivo principal a **separação de responsabilidades**. Cada camada tem um papel muito específico e regras estritas de comunicação.
