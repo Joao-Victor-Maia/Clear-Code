@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clear Code - Simulador do Fluxo (Main → Controller → Service → Repository → Entity)</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --text:#e7eefc;
+      --muted:#a7b4d6;
+      --accent:#4ea1ff;
+      --good:#2ecc71;
+      --bad:#ff5a6a;
+      --line:#273554;
+      --chip:#1b2644;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:linear-gradient(180deg,var(--bg),#060b16);color:var(--text)}
+    header{padding:22px 18px;border-bottom:1px solid var(--line);background:rgba(17,26,46,.65);backdrop-filter: blur(6px);position:sticky;top:0;z-index:5}
+    header h1{margin:0;font-size:18px;letter-spacing:.2px}
+    header p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.35}
+    .wrap{max-width:1200px;margin:0 auto;padding:16px}
+
+    .grid{display:grid;grid-template-columns: 1.2fr .8fr;gap:14px;align-items:start}
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+
+    .card{background:rgba(17,26,46,.75);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+    .card .hd{padding:14px 14px 10px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:var(--chip);color:var(--muted);font-size:12px;border:1px solid rgba(78,161,255,.22)}
+    .badge i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;box-shadow:0 0 0 4px rgba(78,161,255,.12)}
+    .card .body{padding:14px}
+
+    .controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 560px){.controls{grid-template-columns:1fr}}
+
+    label{font-size:12px;color:var(--muted);display:block;margin:0 0 6px}
+    input[type="text"], select{
+      width:100%;
+      border-radius:10px;
+      border:1px solid rgba(78,161,255,.25);
+      background:rgba(6,11,22,.35);
+      color:var(--text);
+      padding:10px 10px;
+      outline:none;
+    }
+    input:focus, select:focus{border-color:rgba(78,161,255,.65);box-shadow:0 0 0 4px rgba(78,161,255,.16)}
+
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+    button{
+      border:0;
+      border-radius:12px;
+      padding:11px 12px;
+      font-weight:800;
+      cursor:pointer;
+      color:#081225;
+    }
+    button:active{transform: translateY(1px)}
+    .btn-primary{background:linear-gradient(180deg,#69b6ff,#2f8fff)}
+    .btn-ghost{background:rgba(78,161,255,.14);color:var(--accent);border:1px solid rgba(78,161,255,.35)}
+    .btn-warn{background:rgba(255,204,102,.18);color:#ffd37a;border:1px solid rgba(255,204,102,.35)}
+
+    .node{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid rgba(39,53,84,.9);
+      background:rgba(15,23,48,.55);
+      margin:10px 0;
+    }
+    .dot{width:12px;height:12px;border-radius:50%;margin-top:4px;background:#5e7aa6;box-shadow:0 0 0 4px rgba(94,122,166,.16);flex:0 0 auto;}
+    .node.active .dot{background:var(--accent);box-shadow:0 0 0 4px rgba(78,161,255,.18)}
+    .node.ok .dot{background:var(--good);box-shadow:0 0 0 4px rgba(46,204,113,.18)}
+    .node.bad .dot{background:var(--bad);box-shadow:0 0 0 4px rgba(255,90,106,.18)}
+
+    .node .title{font-weight:900}
+    .node .desc{color:var(--muted);font-size:13px;margin-top:4px;line-height:1.35}
+
+    .chip{font-size:12px;color:var(--muted);padding:7px 9px;border:1px solid rgba(39,53,84,.9);border-radius:999px;background:rgba(27,38,68,.55)}
+    .chip.good{border-color:rgba(46,204,113,.35);color:#c9f7dd;background:rgba(46,204,113,.08)}
+    .chip.bad{border-color:rgba(255,90,106,.38);color:#ffd1d7;background:rgba(255,90,106,.08)}
+
+    .flow{padding:8px 0 0}
+
+    .timeline{border-top:1px solid var(--line);margin-top:12px;padding-top:10px;color:var(--muted);font-size:13px}
+    .log{
+      height:260px;
+      overflow:auto;
+      padding:10px;
+      border-radius:12px;
+      background:rgba(6,11,22,.25);
+      border:1px solid rgba(39,53,84,.9);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      white-space:pre-wrap;
+      line-height:1.45;
+      color:#d7e3ff;
+    }
+
+    .side .body{display:flex;flex-direction:column;gap:12px}
+    .tip{font-size:13px;color:var(--muted);line-height:1.45}
+    .k{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);border:1px solid rgba(39,53,84,.9);background:rgba(6,11,22,.18);padding:7px 10px;border-radius:999px}
+    .sw{width:10px;height:10px;border-radius:50%}
+    .sw.a{background:var(--accent)}
+    .sw.g{background:var(--good)}
+    .sw.b{background:var(--bad)}
+
+    footer{padding:22px 18px;color:var(--muted);font-size:12px;text-align:center}
+    a{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="padding:0;max-width:1200px">
+      <h1>Simulador Web do Fluxo do Projeto (Main → Controller → Service → Repository → Entity)</h1>
+      <p>Visual educacional mostrando quando o sistema “entra no repositório” e quando a “Entity entra na linha de raciocínio” (por exemplo, quando o Controller monta o <b>Cliente</b> e envia para o Service).</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <section class="card">
+        <div class="hd"><span class="badge"><i></i> Execução simulada</span></div>
+        <div class="body">
+            <div class="controls">
+              <div>
+                <label>Entidade (abre uma “tela”/aba por entidade)</label>
+                <select id="ent">
+                  <option value="cliente" selected>Cliente</option>
+                  <option value="veiculo">Veiculo</option>
+                  <option value="mecanico">Mecanico</option>
+                  <option value="fornecedor">Fornecedor</option>
+                  <option value="peca">Peca</option>
+                  <option value="servico">Servico</option>
+                  <option value="ordem">OrdemService</option>
+                  <option value="transacao">Transacao</option>
+                  <option value="autenticacao">Autenticacao</option>
+                </select>
+              </div>
+
+            </div>
+
+
+            <div style="height:12px"></div>
+
+            <div class="controls">
+              <div>
+                <label>Campo 1 (nome/placa/cargo/etc.)</label>
+                <input id="f1" type="text" placeholder="Ex: Ana / ABC-1234 / Gerente ..." />
+              </div>
+              <div>
+                <label>Campo 2 (cpf/cnpj/valor/etc.)</label>
+                <input id="f2" type="text" placeholder="Ex: 111.222... / 12.345... / 150.00 ..." />
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="controls">
+              <div>
+                <label>Campo 3 (telefone/descrição/outro)</label>
+                <input id="f3" type="text" placeholder="Ex: 99999-0000 / descrição / ..." />
+              </div>
+              <div>
+                <label>Ação</label>
+                <div class="btnrow">
+                  <button class="btn-primary" id="run">▶ Rodar</button>
+                  <button class="btn-ghost" id="reset">↺ Reset</button>
+                </div>
+              </div>
+            </div>
+
+
+          <div class="flow" style="margin-top:14px;">
+
+
+            <div id="nMain" class="node"><div class="dot"></div><div><div class="title">Main</div><div class="desc">Orquestra e chama o menu do Controller.</div><div style="margin-top:8px"><span class="chip" id="chipMain"></span></div></div></div>
+            <div id="nController" class="node"><div class="dot"></div><div><div class="title">Controller</div><div class="desc">Monta a Entity (ex: <b>new Cliente(...)</b>) e chama <b>clienteService.salvar(entity)</b>.</div><div style="margin-top:8px"><span class="chip" id="chipController"></span></div></div></div>
+            <div id="nService" class="node"><div class="dot"></div><div><div class="title">Service</div><div class="desc">Valida regras e pode interromper com <b>throw</b> antes do Repository.</div><div style="margin-top:8px"><span class="chip" id="chipService"></span></div></div></div>
+            <div id="nRepo" class="node"><div class="dot"></div><div><div class="title">Repository</div><div class="desc">Entrada no repositório: <b>RepositoryGenerico.salvar()</b> grava no Map e (se ID for null) gera o ID.</div><div style="margin-top:8px"><span class="chip" id="chipRepo"></span></div></div></div>
+            <div id="nEntity" class="node"><div class="dot"></div><div><div class="title">Entity</div><div class="desc">Após o Repository, a Entity passa a ter <b>ID</b> preenchido.</div><div style="margin-top:8px"><span class="chip" id="chipEntity"></span></div></div></div>
+
+            <div class="timeline">
+              <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px">
+                <div style="font-weight:900;color:var(--text)">Log</div>
+                <div class="chip" id="statusChip">Aguardando...</div>
+              </div>
+              <div class="log" id="log"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card side">
+        <div class="hd"><span class="badge"><i></i> Legenda</span></div>
+        <div class="body">
+          <div class="tip">
+            Map/IDs e validações seguem a ideia do projeto Java:
+            <ul style="margin:10px 0 0 18px">
+              <li><b>Controller</b> → cria Entity</li>
+              <li><b>Service</b> → valida e pode <b>throw</b></li>
+              <li><b>RepositoryGenerico</b> → se id==null, atribui proximoId e faz <b>dados.put</b></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <div class="k"><span class="sw a"></span> Ativo</div>
+            <div class="k"><span class="sw g"></span> Concluído</div>
+            <div class="k"><span class="sw b"></span> Erro (throw)</div>
+          </div>
+          <div class="tip">
+            Referências no seu código:
+            <ul style="margin:10px 0 0 18px">
+              <li><a href="../Controller/ClienteController.java" target="_blank">ClienteController</a></li>
+              <li><a href="../Service/ClienteService.java" target="_blank">ClienteService</a></li>
+              <li><a href="../Repository/RepositoryGenerico.java" target="_blank">RepositoryGenerico</a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer>Arquivo gerado para mostrar visualmente o fluxo do sistema (explicação didática).</footer>
+
+  <script>
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+    const els = {
+      entSelect: document.getElementById('ent'),
+      run: document.getElementById('run'),
+      reset: document.getElementById('reset'),
+      log: document.getElementById('log'),
+      statusChip: document.getElementById('statusChip'),
+      tabs: {
+        cliente: document.getElementById('tabCliente'),
+        veiculo: document.getElementById('tabVeiculo'),
+        mecanico: document.getElementById('tabMecanico'),
+        fornecedor: document.getElementById('tabFornecedor'),
+        peca: document.getElementById('tabPeca'),
+        servico: document.getElementById('tabServico'),
+        ordem: document.getElementById('tabOrdem'),
+        transacao: document.getElementById('tabTransacao'),
+        autenticacao: document.getElementById('tabAutenticacao')
+      },
+      nodes: {
+
+        main: document.getElementById('nMain'),
+        controller: document.getElementById('nController'),
+        service: document.getElementById('nService'),
+        repo: document.getElementById('nRepo'),
+        entity: document.getElementById('nEntity'),
+      },
+      chips: {
+        main: document.getElementById('chipMain'),
+        controller: document.getElementById('chipController'),
+        service: document.getElementById('chipService'),
+        repo: document.getElementById('chipRepo'),
+        entity: document.getElementById('chipEntity'),
+      },
+      f1: document.getElementById('f1'),
+      f2: document.getElementById('f2'),
+      f3: document.getElementById('f3'),
+    };
+
+
+    function log(line){
+      const t = new Date().toLocaleTimeString();
+      els.log.textContent += `[${t}] ${line}\n`;
+      els.log.scrollTop = els.log.scrollHeight;
+    }
+
+    const logsByEntity = {};
+
+    function getActiveEntity(){
+      return els.entSelect.value;
+    }
+
+    function ensureLog(entityKey){
+      if (!logsByEntity[entityKey]) logsByEntity[entityKey] = '';
+    }
+
+    function refreshLogUI(){
+      const key = getActiveEntity();
+      ensureLog(key);
+      els.log.textContent = logsByEntity[key];
+    }
+
+    function resetUI(){
+      for (const k of Object.keys(els.nodes)){
+        els.nodes[k].classList.remove('active','ok','bad');
+      }
+      for (const k of Object.keys(els.chips)){
+        els.chips[k].className = 'chip';
+        els.chips[k].textContent = '';
+      }
+      els.statusChip.textContent = 'Aguardando...';
+      els.statusChip.className = 'chip';
+      // NÃO zera log global; cada entidade tem seu log separado.
+      refreshLogUI();
+    }
+
+
+    function setNode(key, state){
+      const n = els.nodes[key];
+      n.classList.remove('active','ok','bad');
+      if (state) n.classList.add(state);
+    }
+
+    function setChip(key, text, kind){
+      els.chips[key].textContent = text;
+      if (!kind) { els.chips[key].className = 'chip'; return; }
+      els.chips[key].className = 'chip ' + kind;
+    }
+
+    function readForm(){
+      return {
+        // campos livres — você preenche como quiser
+        f1: (els.f1.value || '').trim(),
+        f2: (els.f2.value || '').trim(),
+        f3: (els.f3.value || '').trim(),
+        entity: els.entSelect.value
+      };
+    }
+
+    function resetTabs(){
+      for (const k of Object.keys(els.tabs)){
+        els.tabs[k].classList.remove('active');
+      }
+    }
+
+    function activateTab(key){
+      resetTabs();
+      els.tabs[key].classList.add('active');
+    }
+
+    function entityName(key){
+      const map = {
+        cliente: 'Cliente',
+        veiculo: 'Veiculo',
+        mecanico: 'Mecanico',
+        fornecedor: 'Fornecedor',
+        peca: 'Peca',
+        servico: 'Servico',
+        ordem: 'OrdemService',
+        transacao: 'Transacao',
+        autenticacao: 'Autenticacao'
+      };
+      return map[key] || 'Entity';
+    }
+
+    async function run(){
+
+
+      resetUI();
+      els.statusChip.textContent = 'Rodando...';
+
+      const input = readForm();
+      activateTab(input.entity);
+
+      // Normaliza campos genéricos (f1/f2/f3) para o “shape” que a simulação usa hoje
+      // (id null → repository gera id).
+      const entity = {
+        id: null,
+        nome: input.f1 || 'Ana',
+        cpf: input.f2 || '111.222.333-44',
+        telefone: input.f3 || '99999-0000'
+      };
+
+      // Map simulado do RepositoryGenerico
+
+      const fakeMap = new Map();
+      let proximoId = 1;
+      // Para simplificar a demonstração por entidade, usamos um “falso duplicado” quando o usuário coloca o texto "dup"
+      // no campo 2 (f2). Ex: Campo 2 = "dup" ou "dup-qualquer-coisa".
+      const forçaDuplicado = (input.f2 || '').toLowerCase().includes('dup');
+      if (forçaDuplicado){
+        fakeMap.set(1, { id: 1, nome: 'Outro', cpf: entity.cpf, telefone: '88888-1111' });
+        proximoId = 2;
+      }
+
+
+      // Entity criada pelo Controller (id ainda null) - já montada acima via f1/f2/f3
+
+
+      // MAIN
+      setNode('main','active');
+      setChip('main','Main → chama Controller.exibirMenu()');
+      log('Main: entra no menu e encaminha para o Controller.');
+      await sleep(550);
+      setNode('main','ok');
+
+      // CONTROLLER
+      setNode('controller','active');
+      setChip('controller','Controller: cria Entity (id=null) e chama Service.salvar(entity)');
+      log('Controller: monta ' + entityName(input.entity) + '(id=null) e chama Service.salvar(entity).');
+
+      await sleep(550);
+      setNode('controller','ok');
+
+      // SERVICE
+      setNode('service','active');
+      log('Service: inicia validações (nome/cpf/duplicidade).');
+
+      // “Simulação de erro” (sem dependências de dropdown):
+      // - se Campo 1 (f1) contiver “vazio” => erro de validação (throw)
+      // - se Campo 2 (f2) contiver “dup” => erro de duplicidade (throw)
+      const erroNome = (input.f1 || '').toLowerCase().includes('vazio');
+      const erroDuplicidade = forçaDuplicado;
+
+      if (erroNome){
+        setChip('service','throw: campo 1 obrigatório','bad');
+        setNode('service','bad');
+        els.statusChip.textContent = 'Erro (throw no Service)';
+        els.statusChip.className = 'chip bad';
+        log('Service: validações falham (campo 1).');
+        log('throw: não chama Repository; volta para o Controller (catch).');
+        return;
+      }
+
+      if (erroDuplicidade){
+        setChip('service','check duplicidade → throw','bad');
+        setNode('service','bad');
+        els.statusChip.textContent = 'Erro (throw no Service)';
+        els.statusChip.className = 'chip bad';
+        log('Service: tenta evitar duplicidade e encontra repetido.');
+        log('throw: não chama Repository; volta para o Controller (catch).');
+        return;
+      }
+
+
+      setChip('service','validações passaram','good');
+      setNode('service','ok');
+      log('Service: validações passaram => chama repositorio.salvar(entity).');
+      await sleep(550);
+
+      // REPOSITORY
+      setNode('repo','active');
+      setChip('repo','RepositoryGenerico.salvar(entity)','');
+      log('Repository: entra em salvar().');
+      await sleep(550);
+
+      if (entity.id === null){
+        entity.id = proximoId;
+        proximoId++;
+        log('Repository: entity.id era null => atribui ID = ' + entity.id + ' (proximoId).');
+      }
+
+      fakeMap.set(entity.id, { id: entity.id, nome: entity.nome, cpf: entity.cpf, telefone: entity.telefone });
+      log('Repository: dados.put(ID, entidade) => entidade guardada no Map.');
+      setNode('repo','ok');
+      await sleep(450);
+
+      // ENTITY (after repository)
+      setNode('entity','active');
+      setChip('entity','Entity recebeu ID = ' + entity.id,'good');
+      log('Entity: ID já preenchido após repository.salvar().');
+      await sleep(450);
+      setNode('entity','ok');
+
+      els.statusChip.textContent = 'Sucesso: fluxo completo até a Entity';
+      els.statusChip.className = 'chip good';
+      log('Fim: Service retorna sucesso; Controller exibiria “✅ Cliente salvo! ID: ' + entity.id + '”.');
+    }
+
+    els.run.addEventListener('click', run);
+    els.reset.addEventListener('click', resetUI);
+    resetUI();
+  </script>
+</body>
+</html>
+
