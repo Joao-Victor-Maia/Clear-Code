@@ -21,6 +21,8 @@ public class Main {
         PecaRepository pecaRepo = new PecaRepository();
         ServicoRepository servicoRepo = new ServicoRepository();
         OrdemServiceRepository ordemRepo = new OrdemServiceRepository();
+        TransacaoRepository transacaoRepo = new TransacaoRepository();
+        AutenticacaoRepository autenticacaoRepo = new AutenticacaoRepository();
 
         // =====================================================================
         // 2. INSTANCIANDO SERVICES (Os Cérebros / Regras de Negócio)
@@ -38,6 +40,8 @@ public class Main {
         PecaService pecaService = new PecaService(pecaRepo);
         ServicoService servicoService = new ServicoService(servicoRepo, veiculoRepo);
         OrdemServiceService ordemService = new OrdemServiceService(ordemRepo, veiculoRepo, mecanicoRepo);
+        TransacaoService transacaoService = new TransacaoService(transacaoRepo, ordemRepo);
+        AutenticacaoService autenticacaoService = new AutenticacaoService(autenticacaoRepo);
 
         // =====================================================================
         // 3. INSTANCIANDO CONTROLLERS (A Interface com o Usuário / Terminal)
@@ -54,6 +58,8 @@ public class Main {
         PecaController pecaController = new PecaController(pecaService, console);
         ServicoController servicoController = new ServicoController(servicoService, console);
         OrdemServiceController ordemServiceController = new OrdemServiceController(ordemService, console);
+        TransacaoController transacaoController = new TransacaoController(transacaoService, console);
+        AutenticacaoController autenticacaoController = new AutenticacaoController(autenticacaoService, console);
 
         int opcao = -1;
 
@@ -75,6 +81,8 @@ public class Main {
             System.out.println("║  5 - Peças                       ║");
             System.out.println("║  6 - Serviços                    ║");
             System.out.println("║  7 - Ordens de Serviço           ║");
+            System.out.println("║  8 - Transações                  ║");
+            System.out.println("║  9 - Autenticação                ║");
             System.out.println("║  0 - Sair                        ║");
             System.out.println("╚══════════════════════════════════╝");
             System.out.print("  Escolha: ");
@@ -88,6 +96,8 @@ public class Main {
                 case 5 -> pecaController.exibirMenu();
                 case 6 -> servicoController.exibirMenu();
                 case 7 -> ordemServiceController.exibirMenu();
+                case 8 -> transacaoController.exibirMenu();
+                case 9 -> autenticacaoController.exibirMenu();
                 case 0 -> System.out.println("\nEncerrando o sistema. Até logo!");
                 default -> System.out.println("⚠️  Opção inválida.");
             }
