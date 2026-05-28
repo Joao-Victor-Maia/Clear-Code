@@ -232,17 +232,7 @@
       reset: document.getElementById('reset'),
       log: document.getElementById('log'),
       statusChip: document.getElementById('statusChip'),
-      tabs: {
-        cliente: document.getElementById('tabCliente'),
-        veiculo: document.getElementById('tabVeiculo'),
-        mecanico: document.getElementById('tabMecanico'),
-        fornecedor: document.getElementById('tabFornecedor'),
-        peca: document.getElementById('tabPeca'),
-        servico: document.getElementById('tabServico'),
-        ordem: document.getElementById('tabOrdem'),
-        transacao: document.getElementById('tabTransacao'),
-        autenticacao: document.getElementById('tabAutenticacao')
-      },
+      tabs: {},
       nodes: {
 
         main: document.getElementById('nMain'),
@@ -325,13 +315,15 @@
 
     function resetTabs(){
       for (const k of Object.keys(els.tabs)){
-        els.tabs[k].classList.remove('active');
+        const tab = els.tabs[k];
+        if (tab) tab.classList.remove('active');
       }
     }
 
     function activateTab(key){
       resetTabs();
-      els.tabs[key].classList.add('active');
+      const tab = els.tabs[key];
+      if (tab) tab.classList.add('active');
     }
 
     function entityName(key){
@@ -356,7 +348,6 @@
       els.statusChip.textContent = 'Rodando...';
 
       const input = readForm();
-      activateTab(input.entity);
 
       // Normaliza campos genéricos (f1/f2/f3) para o “shape” que a simulação usa hoje
       // (id null → repository gera id).
